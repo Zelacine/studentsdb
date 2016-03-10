@@ -1,0 +1,146 @@
+{% extends "students/base.html" %}
+{% load static from staticfiles %}
+{% block meta_title %}Студенти{% endblock meta_title %}
+{% block title %}База Студентів{% endblock title %}
+
+<!-- Logo -->
+{% block logo %}
+<div class="col-xs-8">
+  <h1>Сервіс Обліку Студентів</h1>
+</div>
+{% endblock logo %}
+
+<!-- end Logo -->
+
+<!-- Groups Selector -->
+{% block groups_selector %}
+<div class="col-xs-4" id="group-selector">
+  <strong>Група:</strong>
+    <select>
+      <option value="">Усі Студенти</option>
+      <option value="">МтМ - 21, Подоба Віталій (No 254)</option>
+      <option value="">МтМ - 22, Корост Андрій (No 2123)</option>
+      </select>
+</div>
+{% endblock groups_selector %}
+{% block sub_header %}
+<div class="row" id="sub-header">
+	<div class="col-xs-12">
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation"  {% if request.path == '/' %}
+			class="active"{% endif %}><a href="{% url "home" %}">Студенти</a></li>
+			<li role="presentation"{% if '/journal' in request.path %}
+			class="active"{% endif %}><a href="/journal">Відвідування</a><li>
+			<li role="presentation" "presentation" {% if '/groups' in request.path %}
+			class="active"{% endif %}><a href="{% url "groups" %}">Групи</a></li>
+		</ul>
+	</div>
+</div>
+{% endblock sub_header %}
+
+
+
+
+
+
+
+{% block content %}
+<a href="{% url "students_add" %}" class="btn btn-primary">Додати Студента</a>
+
+	<!-- Start Students Listing -->
+	<table class="table table-hover table-striped">
+	{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+	  <thead>
+	    <tr>
+		<th><a href="{% url "home" %}?order_by=id{% if order_by == 'id' and reverse != '1' %}&amp;reverse=1{% endif %}">
+		№{% if order_by == 'id' and reverse != '1' %}&uarr;
+         	{% elif order_by == 'id' and reverse == '1' %}&darr;
+          	{% endif %}
+		</th>
+	      <th>Фото</th>
+	        <th> 
+		<a href="{% url "home" %}?order_by=last_name{% if order_by == 'last_name' and reverse != '1' %}&amp;reverse=1{% endif %}">
+          Прізвище
+          {% if order_by == 'last_name' and reverse != '1' %}&uarr;
+          {% elif order_by == 'last_name' and reverse == '1' %}&darr;
+          {% endif %}
+        </a>
+      </th>
+      <th>
+        <a href="{% url "home" %}?order_by=first_name{% if order_by == 'first_name' and reverse != '1' %}&amp;reverse=1{% endif %}">
+          Ім'я
+          {% if order_by == 'first_name' and reverse != '1' %}&uarr;
+          {% elif order_by == 'first_name' and reverse == '1' %}&darr;
+          {% endif %}
+      </th>
+      <th>
+        <a href="{% url "home" %}?order_by=ticket{% if order_by == 'ticket' and reverse != '1' %}&amp;reverse=1{% endif %}">
+          № Білету
+          {% if order_by == 'ticket' and reverse != '1' %}&uarr;
+          {% elif order_by == 'ticket' and reverse == '1' %}&darr;
+          {% endif %} 
+		</th>
+	      <th>Дії</th>
+	    </tr>
+	  </thead>
+	  {% endwith %}
+	  <tbody>
+		{% for student in students %}
+	      <tr>
+	      <td>{{student.id}}</td>
+	      <td>
+		{% if student.photo %}
+			<img class="img-circle" src="{{ student.photo.url }}" height="30" width="30" />
+		{% else %}
+			<img class="img-circle" src="{% static "img/User-Default.jpg" %}" height="30" width="30" />
+		{% endif %}
+	      </td>
+              <td> <a title="Редагувати" href="{% url "students_edit" student.id %}" >{{student.last_name}}</a> </td>
+	      <td> <a title="Редагувати" href="{% url "students_edit" student.id %}" >{{student.first_name}}</a> </td>
+	      <td>{{student.ticket}}</td>
+	      <td>
+		    <div class="dropdown" >
+			<button class="btn btn-default dropdown-toggle"
+			        type="button" data-toggle="dropdown" > Дія
+				<span class="caret" > </span>
+			</button>
+			<ul class="dropdown-menu" role="menu" >
+				<li role="presentation" >
+					<a role="menuitem" tabindex="-1"
+						href="/journal/{{student.id}}" > Відвідування</a>
+				</li>
+				<li role="presentation" >
+					<a role="menuitem" tabindex="-1" href="{% url "students_edit" student.id %}" > Редагувати</a>
+				</li>
+				<li role="presentation" >
+					<a role="menuitem" tabindex="-1" href="{% url "students_delete" student.id %}" > Видалити</a>
+				</li>
+			</ul>
+			</div>
+		  </td>
+		  </tr>
+		{% endfor %}
+	  </tbody>
+	</table>
+		{% if students.has_other_pages %}
+		
+		{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+		<nav>
+		<ul class="pagination" >
+			<li > <a href="{% url "home" %}?page=1&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">&laquo;</a> </li>
+			{% for p in students.paginator.page_range %}
+			<li {% if students.number == p %}class="active"{% endif %}>
+			    <a href="{% url "home" %}?page={{ p }}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">{{ p }}</a>
+			</li>
+			{% endfor %}
+			<li>
+			    <a href="{% url "home" %}?page={{ students.paginator.num_pages}}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">
+				&raquo;</a>
+			</li>
+		</ul>
+		</nav>
+		{% endwith %}
+		{% endif %}
+		</ul>
+		</nav>
+		{% endblock content %}

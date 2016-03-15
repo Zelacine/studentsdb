@@ -26,7 +26,8 @@ urlpatterns = patterns('',
     # Journal urls
     url(r'^journal/$', 'students.views.journal.journal_list', name='journal'),
     #examinations
-    url(r'^examinations/$', 'students.views.examinations.examinations', name='examinations'),
+    url(r'^examinations/$', 'students.views.examinations.examinations',
+         name='examinations'),
 
 
 

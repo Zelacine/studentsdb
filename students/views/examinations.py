@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models.groups import Group
-from ..models import Examination
+from ..models.examinations import Examination
 
 
 

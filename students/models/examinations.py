@@ -32,16 +32,15 @@ class Examination(models.Model):
 		verbose_name=u"Преподователь",
 		)
 
-	group = models.OneToOneField('Group',
+	group = models.ManyToManyField('Group',
 		null =True,
 		blank = True,
 		verbose_name=u"Группа",
-		on_delete = models.SET_NULL)
-
-
+		# on_delete = models.SET_NULL
+		)
 	
-
 	def __unicode__(self):
+
 
 		if self.title:
 			return u"%s %s" % (self.title,  self.group)

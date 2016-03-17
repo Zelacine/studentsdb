@@ -56,10 +56,10 @@
 		</th>
 	      
 	        <th> 
-		<a href="{% url "examinations" %}?order_by=title{% if order_by == 'title' and reverse != '1' %}&amp;reverse=1{% endif %}">
+		<a href="{% url "examinations" %}?order_by=title_exam{% if order_by == 'title_exam' and reverse != '1' %}&amp;reverse=1{% endif %}">
           Назва предмету
-          {% if order_by == 'title' and reverse != '1' %}&uarr;
-          {% elif order_by == 'title' and reverse == '1' %}&darr;
+          {% if order_by == 'title_exam' and reverse != '1' %}&uarr;
+          {% elif order_by == 'title_exam' and reverse == '1' %}&darr;
           {% endif %}
         </a>
       </th>

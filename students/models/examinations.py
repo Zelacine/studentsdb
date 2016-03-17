@@ -8,11 +8,9 @@ from django.db import models
 
 class Examination(models.Model):
 	"""Examination Model"""
-	class Meta(object):
-		verbose_name = u"Экзамен"
-        verbose_name_plural = u"Экзамен"
 	
-	title = models.CharField(
+	
+	title_exam = models.CharField(
 		max_length = 256,
 		blank =False,
 		verbose_name=u"Название предмета")	
@@ -32,18 +30,24 @@ class Examination(models.Model):
 		verbose_name=u"Преподователь",
 		)
 
-	group = models.ManyToManyField('Group',
+	group = models.ForeignKey('Group',
 		null =True,
 		blank = True,
 		verbose_name=u"Группа",
-		# on_delete = models.SET_NULL
+		on_delete = models.SET_NULL
 		)
+
+
+	class Meta(object):
+		verbose_name = u"Экзамен"
+        verbose_name_plural = u"Экзамен"	
+
 	
 	def __unicode__(self):
 
 
-		if self.title:
-			return u"%s %s" % (self.title,  self.group)
+		if self.teacher:
+			return u"%s  %s" % (self.title_exam,  self.group )
 		else:
-			return u"%s" % (self.title)
+			return u"%s" % title_exam
 

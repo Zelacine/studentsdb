@@ -28,12 +28,13 @@ class Examination(models.Model):
 		max_length = 256,
 		blank = True,
 		verbose_name=u"Преподователь",
-		)
+		) 
 
 	group = models.ForeignKey('Group',
 		null =True,
 		blank = True,
 		verbose_name=u"Группа",
+		
 		on_delete = models.SET_NULL
 		)
 

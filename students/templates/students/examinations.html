@@ -1,7 +1,7 @@
 {% extends "students/base.html" %}
 {% load static from staticfiles %}
-{% block meta_title %}Студенти{% endblock meta_title %}
-{% block title %}База Студентів{% endblock title %}
+{% block meta_title %}Экзамены{% endblock meta_title %}
+{% block title %}База Экзаменов{% endblock title %}
 
 <!-- Logo -->
 {% block logo %}
@@ -16,6 +16,7 @@
 {% block groups_selector %}
 
 {% endblock groups_selector %}
+
 {% block sub_header %}
 <div class="row" id="sub-header">
 	<div class="col-xs-12">
@@ -36,11 +37,6 @@
 {% endblock sub_header %}
 
 
-
-
-
-
-
 {% block content %}
 
 
@@ -50,79 +46,92 @@
 	  <thead>
 	    <tr>
 		<th><a href="{% url "examinations" %}?order_by=id{% if order_by == 'id' and reverse != '1' %}&amp;reverse=1{% endif %}">
-		№{% if order_by == 'id' and reverse != '1' %}&uarr;
+		
+		№
+			{% if order_by == 'id' and reverse != '1' %}&uarr;
          	{% elif order_by == 'id' and reverse == '1' %}&darr;
           	{% endif %}
 		</th>
-	      
-	        <th> 
+	    
+	    <th> 
 		<a href="{% url "examinations" %}?order_by=title_exam{% if order_by == 'title_exam' and reverse != '1' %}&amp;reverse=1{% endif %}">
-          Назва предмету
+        
+        Назва предмету
           {% if order_by == 'title_exam' and reverse != '1' %}&uarr;
           {% elif order_by == 'title_exam' and reverse == '1' %}&darr;
           {% endif %}
         </a>
       </th>
-      <th>
+        <th>
         <a href="{% url "examinations" %}?order_by=teacher{% if order_by == 'teacher' and reverse != '1' %}&amp;reverse=1{% endif %}">
-          Фамилия преподователя
+        
+        ФИО преподователя
           {% if order_by == 'teacher' and reverse != '1' %}&uarr;
           {% elif order_by == 'teacher' and reverse == '1' %}&darr;
           {% endif %}
       </th>
       <th>
         <a href="{% url "examinations" %}?order_by=during_time{% if order_by == 'during_time' and reverse != '1' %}&amp;reverse=1{% endif %}">
-          Дата та час проведення
+        
+        Дата та час проведення
           {% if order_by == 'during_time' and reverse != '1' %}&uarr;
           {% elif order_by == 'during_time' and reverse == '1' %}&darr;
           {% endif %} 
-		</th>
-		<th>
+		</th> 
+		 <th>
         <a href="{% url "examinations" %}?order_by=group{% if order_by == 'group' and reverse != '1' %}&amp;reverse=1{% endif %}">
-          Групи
+        
+        Групи
           {% if order_by == 'group' and reverse != '1' %}&uarr;
           {% elif order_by == 'group' and reverse == '1' %}&darr;
           {% endif %} 
-		</th>
+		</th>  
 
-
-	      <th>Дії</th>
+		<th>Дії </th> 
+	    
 	    </tr>
 	  </thead>
 	  {% endwith %}
 	  <tbody>
-		{% for student in students %}
-	      <tr>
-	      <td>{{student.id}}</td>
-	      
 
-              <td> <a title="Редагувати" href="{% url "students_edit" student.id %}" >{{student.last_name}}</a> </td>
-	      <td> <a title="Редагувати" href="{% url "students_edit" student.id %}" >{{student.first_name}}</a> </td>
-	      <td>{{student.ticket}}</td>
+		{% for exam in examinations %}
+	      <tr>
+	      <td>{{exam.id}}</td>
+	      <td>{{exam.title_exam}}</td>
+
+
+	     <td>
+	     <a title="Редагувати" href="{% url "examinations_edit" exam.id %}" >{{exam.teacher}}</a> </td>
+
+	      <td> <a title="Редагувати" href="{% url "examinations_edit" exam.id %}" >{{exam.during_time}}</a> </td>
+
+	      <td>{{exam.group}}</td>
 	      <td>
-		    <div class="dropdown" >
+
+
+		     <div class="dropdown" >
 			<button class="btn btn-default dropdown-toggle"
 			        type="button" data-toggle="dropdown" > Дія
 				<span class="caret" > </span>
 			</button>
 			<ul class="dropdown-menu" role="menu" >
+				
 				<li role="presentation" >
-					<a role="menuitem" tabindex="-1"
-						href="/journal/{{student.id}}" > Відвідування</a>
+					<a role="menuitem" tabindex="-1" href="{% url "examinations_edit" exam.id %}" > Редагувати</a>
 				</li>
 				<li role="presentation" >
-					<a role="menuitem" tabindex="-1" href="{% url "students_edit" student.id %}" > Редагувати</a>
-				</li>
-				<li role="presentation" >
-					<a role="menuitem" tabindex="-1" href="{% url "students_delete" student.id %}" > Видалити</a>
+					<a role="menuitem" tabindex="-1" href="{% url "examinations_delete" exam.id %}" > Видалити</a>
 				</li>
 			</ul>
-			</div>
+			</div> 
+
 		  </td>
 		  </tr>
 		{% endfor %}
 	  </tbody>
 	</table>
+
+
 		{% if examinations.has_other_pages %}
 		
 		{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
@@ -133,7 +142,7 @@
 			<li {% if examinatios.number == p %}class="active"{% endif %}>
 			    <a href="{% url "examinations" %}?page={{ p }}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">{{ p }}</a>
 			</li>
-			{% endfor %}
+			{% endfor %}			
 			<li>
 			    <a href="{% url "examinations" %}?page={{ examinations.paginator.num_pages}}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">
 				&raquo;</a>
